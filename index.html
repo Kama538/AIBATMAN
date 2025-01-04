@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bring Justice</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('gotham.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        audio {
+            display: none;
+        }
+
+        /* Style for the button */
+        .image-button {
+            position: absolute;
+            bottom: 10%;
+            width: 400px;
+            height: 150px;
+            border: 3px solid red;
+            border-radius: 20px;
+            background: #000;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .image-button img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: auto;
+            z-index: 1;
+        }
+
+        .button-text {
+            position: absolute;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .image-button:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s ease;
+        }
+
+        /* Style for falling item */
+        .falling-item {
+            position: absolute;
+            animation: fall 2s ease-in forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .falling-item img {
+            width: 150px; /* Increased image size */
+            height: auto;
+        }
+
+        .falling-text {
+            font-size: 16px; /* Smaller text size */
+            font-weight: bold;
+            color: white; /* Text color changed to white */
+            margin-top: 5px;
+        }
+
+        /* Keyframes for falling animation */
+        @keyframes fall {
+            0% {
+                top: -50px;
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background music -->
+    <audio id="background-audio" loop>
+        <source src="The Batman Theme - Danny Elfman (youtube).mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Image button -->
+    <button class="image-button" id="action-button">
+        <img src="joker.png" alt="Joker">
+        <div class="button-text">BRING JUSTICE</div>
+    </button>
+
+    <script>
+        const body = document.body;
+        const backgroundAudio = document.getElementById('background-audio');
+        const actionButton = document.getElementById('action-button');
+
+        // Function to handle button click
+        actionButton.addEventListener('click', () => {
+            // Play the audio on button click
+            backgroundAudio.play().catch((error) => {
+                console.error("Audio playback failed. Reason:", error);
+            });
+
+            // Create a new element for the falling item
+            const fallingItem = document.createElement('div');
+            fallingItem.className = 'falling-item';
+
+            // Create the image element for the falling bat
+            const fallingImage = document.createElement('img');
+            fallingImage.src = 'bat.png'; // Image for the falling bat
+            fallingItem.appendChild(fallingImage);
+
+            // Create the text element below the bat
+            const fallingText = document.createElement('div');
+            fallingText.className = 'falling-text';
+            fallingText.textContent = 'CA: GCQ6aQKsGHFdXjY2C1QuStA2PDbXgrgGJSZSVWbipump';
+            fallingItem.appendChild(fallingText);
+
+            // Define the void area for the button
+            const buttonRect = actionButton.getBoundingClientRect();
+            const voidAreaLeft = buttonRect.left - 50; // 50px padding left of the button
+            const voidAreaRight = buttonRect.right + 50; // 50px padding right of the button;
+
+            let randomLeft;
+
+            // Generate a random horizontal position outside the void area
+            do {
+                randomLeft = Math.random() * window.innerWidth;
+            } while (randomLeft > voidAreaLeft && randomLeft < voidAreaRight);
+
+            // Calculate a random height for where the text and image will stop
+            const randomTop = Math.random() * (window.innerHeight - 200); // Randomize height, keeping it within the screen
+
+            // Apply the calculated position and append to body
+            fallingItem.style.left = `${randomLeft}px`;
+            body.appendChild(fallingItem);
+
+            // Animate falling to random position
+            fallingItem.style.top = `${randomTop}px`; // Final position
+            fallingItem.style.animationFillMode = 'forwards'; // Ensure the animation stops at the final keyframe
+        });
+    </script>
+</body>
+</html>
